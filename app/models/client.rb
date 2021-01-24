@@ -19,7 +19,7 @@ class Client < ActiveRecord::Base
 
         genre_count = Hash.new(0)
         rentals.each do |rental|
-            genres = rental.vhs.movie.genre.pluck(:name)
+            genres = rental.vhs.movie.genres.pluck(:name)
             genres.each do |genre|
                 genre_count[genre] += 1
             end

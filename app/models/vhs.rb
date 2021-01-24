@@ -9,11 +9,13 @@ class Vhs < ActiveRecord::Base
     def self.hot_from_the_press(title: , year: , length: , director: , description: , female_director: , genre: )
         a_movie = Movie.create(title: title, year: year, length: length, director: director, description: description, female_director: female_director)
         a_genre = Genre.find_or_create_by(name: genre)
-        a_movie.genre = a_genre
+        a_movie.genres << a_genre
         a_genre.movies << a_movie
         a_movie.save
         a_genre.save
-        hot_vhs_list = Vhs.create({movie: a_movie},{movie: a_movie},{movie: a_movie})
+        3.times do  
+            Vhs.create({movie: a_movie})
+        end
     end
 
     #should be good

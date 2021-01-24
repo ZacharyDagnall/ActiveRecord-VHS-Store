@@ -13,7 +13,11 @@ class Genre < ActiveRecord::Base
     #helper method
     # 0.0 used to guard against integer division (roundoff)
     def average_movie_length
-        self.movies.sum(0.0){|movie| movie.length}/self.movies.length
+        if self.movies.length != 0 
+            self.movies.sum(0.0){|movie| movie.length}/self.movies.length
+        else
+            0
+        end
     end
 
 end

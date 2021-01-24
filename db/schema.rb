@@ -47,12 +47,9 @@ ActiveRecord::Schema.define(version: 2021_01_23_165451) do
     t.boolean "current"
     t.integer "client_id"
     t.integer "vhs_id"
-<<<<<<< HEAD
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-=======
     t.date "date_created"
->>>>>>> 51b364fb6f19811aa2974680874fc3098ba16a62
   end
 
   create_table "vhs", force: :cascade do |t|
