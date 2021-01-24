@@ -2,9 +2,35 @@ class Vhs < ActiveRecord::Base
     has_many :rentals
     has_many :clients, through: :rentals
     belongs_to :movie
-    
-    
+        
     after_initialize :add_serial_number
+
+    #not sure if there's a way to slim this down. 
+    def self.hot_from_the_press(title: , year: , length: , director: , description: , female_director: , genre: )
+        a_movie = Movie.create(title: title, year: year, length: length, director: director, description: description, female_director: female_director)
+        a_genre = Genre.find_or_create_by(name: genre)
+        a_movie.genre = a_genre
+        a_genre.movies << a_movie
+        a_movie.save
+        a_genre.save
+        hot_vhs_list = Vhs.create({movie: a_movie},{movie: a_movie},{movie: a_movie})
+    end
+
+    #should be good
+    def self.most_used
+        most_used_arr = self.all.max_by(3){|vhs| vhs.rentals.length}
+        most_used_arr.each{|vhs| puts "serial number: #{vhs.serial_number} | title: #{vhs.movie.title}" }
+    end
+
+    #for each vhs, selects it if NONE of its rentals are CURRENT (therefore available)
+    def self.available_now
+        self.all.select{|vhs| vhs.rentals.none?{|rental| rental.current=true} }
+    end
+
+    #if i used just map instead of flat_map, we would get a list of lists (not what we want)
+    def self.all_genres
+        self.available_now.flat_map{|vhs| vhs.movie.genres}.uniq
+    end
 
 
     private
@@ -31,22 +57,6 @@ class Vhs < ActiveRecord::Base
         return self.movie.title.split(" ")[1][0..3].gsub(/s/, "").upcase + "-" if two_part_title?
         return self.movie.title.gsub(/s/, "").upcase + "-" unless long_title?
         self.movie.title[0..3].gsub(/s/, "").upcase + "-"
-    end
-
-    def self.hot_from_the_press
-    
-    end
-
-    def self.most_used
-
-    end
-
-    def self.all_genres
-
-    end
-
-    def self.available_now
-
     end
 
 end

@@ -5,7 +5,62 @@ class Movie < ActiveRecord::Base
     has_many :rentals, through: :vhs
 
     def self.available_now
+<<<<<<< HEAD
        
     
     end    
 
+=======
+        all.select{|movie| movie.vhs.rental.current == false}
+    end
+
+    def self.most_clients
+        all.max_by{|movie| movie.rentals.size} #this should return the most rented movie, but not necessarily the one rented by the most individual people because of repeats
+        all.max{|movie| movie.rentals.max_by{|rental| rental.clients.size}} #trying to return the movie with the most clients by getting the rental with the largest array of clients. Does it work backwards like this? rentals belongs to clients, I can see how manny clients from each instance of rental I think?
+    end
+
+    def self.most_rentals
+        all.max_by(3){|movie| movie.rentals.size}
+    end
+
+    def self.most_popular_female_director
+        most = get_female_directed_movies.max_by{|movie| movie.rentals.size}
+        most.director
+    end
+
+    def self.newest_first
+        all.sort_by{|movie| movie.year}.reverse!
+    end
+
+    def self.longest
+        all.sort_by{|movie| movie.length}.reverse!
+    end
+
+    def recommendation
+       puts "#{title} #{get_emoji.sample} \n #{description} #{length} #{director} #{year}" #this is listed in the deliverable as an instance method but that seems silly, a recommendation when already in a movie instance?
+    end
+
+    def self.surprise_me
+        movie = all.sample
+        movie.recommendation
+    end
+
+    def report_stolen
+        to_delete = vhs.sample #vhs plural is vhs, how do I make sure I am operating on the vhs array?
+        destroy(to_delete)
+        puts "THANK YOU FOR YOUR REPORT. WE WILL LAUNCH AN INVESTIGATION."
+    end
+
+    def self.get_female_directed_movies
+        all.select{|movie| movie.female_director == true}
+    end
+
+    private_class_method :get_female_directed_movies
+
+    private
+    def get_emoji
+       arr = [":)", ":D", ":P", "xD"]
+    end
+
+end
+>>>>>>> 51b364fb6f19811aa2974680874fc3098ba16a62
