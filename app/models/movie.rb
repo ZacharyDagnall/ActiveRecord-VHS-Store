@@ -4,6 +4,7 @@ class Movie < ActiveRecord::Base
     has_many :genres, through: :movie_genres
     has_many :rentals, through: :vhs
 
+    #hey testing
     def self.available_now
         Vhs.available_now.map{|vhs| vhs.movie} 
     end
@@ -58,4 +59,3 @@ class Movie < ActiveRecord::Base
     end
 
 end
-
