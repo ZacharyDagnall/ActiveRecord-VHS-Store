@@ -4,13 +4,8 @@ class Movie < ActiveRecord::Base
     has_many :genres, through: :movie_genres
     has_many :rentals, through: :vhs
 
+    #hey testing
     def self.available_now
-<<<<<<< HEAD
-       
-    
-    end    
-
-=======
         all.select{|movie| movie.vhs.rental.current == false}
     end
 
@@ -63,4 +58,3 @@ class Movie < ActiveRecord::Base
     end
 
 end
->>>>>>> 51b364fb6f19811aa2974680874fc3098ba16a62
