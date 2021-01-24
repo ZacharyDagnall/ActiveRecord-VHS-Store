@@ -5,16 +5,11 @@ class Movie < ActiveRecord::Base
     has_many :rentals, through: :vhs
 
     def self.available_now
-<<<<<<< HEAD
-       
-    
-    end    
-
-=======
-        all.select{|movie| movie.vhs.rental.current == false}
+        Vhs.available_now.map{|vhs| vhs.movie} 
     end
-
+    #incomplete
     def self.most_clients
+        # Client.all.map{|client| client.movies.length} 
         all.max_by{|movie| movie.rentals.size} #this should return the most rented movie, but not necessarily the one rented by the most individual people because of repeats
         all.max{|movie| movie.rentals.max_by{|rental| rental.clients.size}} #trying to return the movie with the most clients by getting the rental with the largest array of clients. Does it work backwards like this? rentals belongs to clients, I can see how manny clients from each instance of rental I think?
     end
@@ -46,8 +41,8 @@ class Movie < ActiveRecord::Base
     end
 
     def report_stolen
-        to_delete = vhs.sample #vhs plural is vhs, how do I make sure I am operating on the vhs array?
-        destroy(to_delete)
+        to_delete = vhs.map{|vhs| vhs.rentals.all?{|rental| rental.current == false}}.sample
+        Vhs.destroy(to_delete)
         puts "THANK YOU FOR YOUR REPORT. WE WILL LAUNCH AN INVESTIGATION."
     end
 
@@ -63,4 +58,4 @@ class Movie < ActiveRecord::Base
     end
 
 end
->>>>>>> 51b364fb6f19811aa2974680874fc3098ba16a62
+

@@ -7,7 +7,7 @@ class Rental < ActiveRecord::Base
     end
 
     def self.past_due_date
-        self.all.select({|rental| rental.due_date < date.today})
+        self.all.select{|rental| rental.due_date < date.today}
     end
 
 end
