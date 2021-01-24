@@ -7,6 +7,7 @@ class CreateMovies < ActiveRecord::Migration[5.2]
       t.string :director
       t.string :description
       t.boolean :female_director
+      t.timestamps
     end
   end
 end
